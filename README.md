@@ -1,201 +1,242 @@
-# Loan Approval: Advanced Analysis and Feature Engineering
+<p align="center">
+  <img src="images/wilson-moses-banner.png" width="100%" alt="Wilson Moses - Data Science and AI Engineering">
+</p>
 
-> Statistical analysis, feature engineering, responsible feature selection, and leakage-safe machine-learning preparation for historical loan-approval data.
+<p align="center">
+  <a href="https://www.linkedin.com/in/wilson-moses-9207b22bb">LinkedIn</a>
+  ·
+  <a href="https://github.com/WilsonMoses-Data">GitHub</a>
+  ·
+  <a href="https://www.tiktok.com/@moses.learnsdata">Moses Learns Data</a>
+</p>
 
-**Programme:** AnalystLab Africa Data Science Internship — Week 3  
-**Project phase:** Completed  
-**Author:** [Wilson Moses](https://github.com/WilsonMoses-Data)
+# Loan Approval Analysis and Feature Engineering
+
+> Statistical analysis and feature engineering for 614 historical loan applications, including six hypothesis tests, 12 engineered features and leakage-safe machine-learning preparation.
+
+![Loan Approval Analysis and Feature Engineering project card](images/social-preview.png)
+
+## Project snapshot
+
+| Project detail | Information |
+|---|---|
+| Domain | Financial Analytics |
+| Context | AnalystLab Africa Data Science Internship - Week 3 |
+| Status | Completed analysis and feature-engineering phase |
+| Dataset | 614 historical loan applications |
+| Target | `loan_status` (`Y`/`N`) and numerical `approved` (`1`/`0`) |
+| Core tools | Python, pandas, NumPy, SciPy, scikit-learn, Matplotlib, Seaborn and Jupyter |
+| Deliverables | Executable notebook, four processed datasets, data dictionary, three reports and reproducible visuals |
 
 ## Project overview
 
-This project investigates 614 historical loan applications to identify the characteristics associated with loan approval and prepare a documented dataset for later predictive modelling.
+This project extends the preceding loan-data-preparation phase into statistical inference, multivariate exploration, interpretable feature engineering and leakage-safe preprocessing. It asks which applicant, household, financial and credit-related characteristics are associated with historical loan decisions and how those characteristics can be prepared responsibly for later modelling.
 
-Building on the cleaning completed during Week 2, the work moves beyond descriptive summaries into statistical inference, multivariate exploration, engineered financial indicators, responsible feature decisions, and a preprocessing workflow designed to limit data leakage.
-
-> **Business question:** Which applicant, household, financial, and credit-related characteristics are associated with historical loan decisions, and how can those characteristics be prepared responsibly for predictive modelling?
+This is an educational portfolio analysis. It does not present a validated lending model and must not be used to make real loan decisions.
 
 ## Objectives
 
-1. Validate the quality and consistency of the cleaned dataset.
-2. Examine distributions, outliers, approval patterns, and relationships.
-3. Test whether observed relationships are statistically supported.
-4. Create interpretable household, income, credit, and repayment features.
-5. Select useful modelling features while controlling redundancy and fairness risks.
-6. Prepare training and testing data without fitting transformations on held-out observations.
-7. Translate technical evidence into business recommendations.
+1. Revalidate the quality and consistency of the cleaned dataset.
+2. Examine distributions, approval patterns and relationships.
+3. Test six business questions using appropriate nonparametric methods.
+4. Create interpretable household, income, credit and repayment features.
+5. Select useful modelling inputs while controlling redundancy and fairness risk.
+6. Create a stratified train/test split before fitting encoders and scalers.
+7. Translate technical evidence into responsible business recommendations.
 
 ## Dataset summary
 
-| Measure | Result |
+| Measure | Verified result |
 |---|---:|
 | Applications analysed | 614 |
-| Approved applications | 422 |
-| Rejected applications | 192 |
-| Overall approval rate | 68.73% |
-| Engineered features created | 12 |
+| Approved / rejected | 422 / 192 |
+| Historical approval rate | 68.73% |
+| Engineered features | 12 |
 | Final analytical columns | 26 |
-| Selected source modelling features | 12 |
-| Encoded modelling features | 13 |
-| Training observations | 491 |
-| Held-out testing observations | 123 |
+| Final encoded predictors | 13 |
+| Training / test observations | 491 / 123 |
+| Missing values in published outputs | 0 |
+| Exact duplicate rows | 0 |
 
-The target is `loan_status`, represented as `Y`/`N` in the source and `1`/`0` for numerical analysis.
-
-## Tools and technologies
-
-- Python and Jupyter Notebook
-- pandas and NumPy
-- Matplotlib and Seaborn
-- SciPy
-- scikit-learn: `mutual_info_classif`, `train_test_split`, `ColumnTransformer`, `OneHotEncoder`, and `StandardScaler`
+See [data documentation](data/README.md) for file contracts and responsible-use notes.
 
 ## Analytical workflow
 
-### 1. Advanced data-quality assessment
+1. Loaded the upstream cleaned dataset and rechecked quality.
+2. Explored financial distributions, categorical rates and outcome differences.
+3. Used chi-square, Mann-Whitney U, Kruskal-Wallis and Spearman tests.
+4. Quantified categorical effect size with Cramer's V.
+5. Created 12 business-readable analytical features.
+6. Selected model inputs using evidence, mutual information, interpretability and redundancy controls.
+7. Excluded gender from predictive inputs while retaining it for fairness auditing.
+8. Split the data 80/20 before fitting encoding and scaling on training data only.
 
-The notebook checks dimensions, data types, missing values, duplicates, categorical consistency, invalid numerical values, engineered-feature calculations, IQR outliers, and target balance.
+## Statistical findings
 
-### 2. Exploratory analysis
+| Question | Result | Interpretation |
+|---|---|---|
+| Credit history vs approval | `p < 0.001`; Cramer's V `0.536` | Strong observed association |
+| Property area vs approval | `p = 0.002`; Cramer's V `0.142` | Significant but comparatively weak association |
+| Total income by outcome | `p = 0.713` | No significant independent difference |
+| Loan amount by outcome | `p = 0.398` | No significant independent difference |
+| Total income across property areas | `p = 0.140` | No significant difference |
+| Total income vs loan amount | Spearman rho `0.688`; `p < 0.001` | Strong positive relationship |
 
-The analysis includes:
+Credit history is the clearest observed signal, but historical association does not establish causation, fairness or legitimate policy relevance.
 
-- financial distributions and log transformations;
-- categorical frequencies and approval rates;
-- cross-tabulations and row percentages;
-- numerical comparisons by outcome;
-- Pearson and Spearman correlations; and
-- combined credit-history and property-area analysis.
+## Visual results
 
-### 3. Statistical analysis
+### Credit history and approval
 
-| Question | Method | Result | Interpretation |
-|---|---|---|---|
-| Credit history vs. approval | Chi-square | `p < 0.001`; Cramér’s V = `0.536` | Strong association |
-| Property area vs. approval | Chi-square | `p = 0.002`; Cramér’s V = `0.142` | Significant but comparatively weak association |
-| Total income by outcome | Mann–Whitney U | `p = 0.713` | No significant independent difference |
-| Loan amount by outcome | Mann–Whitney U | `p = 0.398` | No significant independent difference |
-| Total income across property areas | Kruskal–Wallis | `p = 0.140` | No significant difference |
-| Total income vs. loan amount | Spearman correlation | `rho = 0.688`; `p < 0.001` | Strong positive relationship |
+![Approval rate by credit-history status](images/credit-history-approval.png)
 
-Nonparametric methods were used for right-skewed financial variables. Statistical significance was assessed at `alpha = 0.05`.
+### Property area and approval
 
-### 4. Feature engineering
+![Approval rate by property area](images/property-area-approval.png)
 
-Twelve features were created:
+### Income and requested loan amount
 
-| Feature | Purpose |
+![Total income and requested loan amount relationship](images/income-loan-relationship.png)
+
+## Feature engineering
+
+The notebook creates 12 features:
+
+| Feature group | Engineered features |
 |---|---|
-| `dependents_numeric` | Numerical representation of dependents |
-| `family_size` | Estimated household size |
-| `family_size_group` | Interpretable household-size band |
-| `income_band` | Descriptive household-income range |
-| `has_coapplicant_income` | Indicates a coapplicant income contribution |
-| `coapplicant_income_share` | Share of household income from the coapplicant |
-| `term_years` | Repayment term in years |
-| `estimated_monthly_principal` | Approximate monthly principal payment |
-| `payment_income_ratio` | Approximate repayment burden relative to income |
-| `credit_risk_category` | Business-readable credit-history category |
-| `log_total_income` | Reduced-skew household income |
-| `log_loan_amount` | Reduced-skew requested amount |
+| Household | `dependents_numeric`, `family_size`, `family_size_group` |
+| Income | `income_band`, `has_coapplicant_income`, `coapplicant_income_share` |
+| Duration and affordability | `term_years`, `estimated_monthly_principal`, `payment_income_ratio` |
+| Credit and transformations | `credit_risk_category`, `log_total_income`, `log_loan_amount` |
 
-The affordability measures are proxies. Interest, existing debt, expenses, insurance, and verified monthly obligations are unavailable.
+The repayment-burden measures are proxies. They exclude interest, existing debt, expenses, insurance and verified monthly obligations.
 
-### 5. Feature selection
-
-Final source features were selected using statistical evidence, mutual information, interpretability, redundancy, and responsible-use considerations.
-
-```python
-final_selected_features = [
-    "married",
-    "dependents_numeric",
-    "education",
-    "self_employed",
-    "property_area",
-    "credit_history",
-    "log_total_income",
-    "log_loan_amount",
-    "term_years",
-    "has_coapplicant_income",
-    "coapplicant_income_share",
-    "payment_income_ratio",
-]
-```
-
-`gender` was excluded from predictive inputs because it can function as a protected characteristic. It remains relevant for fairness monitoring and subgroup evaluation.
-
-### 6. Leakage-safe ML preparation
-
-1. Separate predictors and target.
-2. Create a stratified 80/20 split using `random_state=42`.
-3. Fit categorical encoding and continuous scaling on training data only.
-4. Apply the fitted transformations to held-out data.
-5. Export analytical and model-ready datasets.
-
-## Key findings
-
-- Credit history is the dominant observed factor associated with approval.
-- Applicants with positive credit history had a 79.05% approval rate, compared with 7.87% for those without positive credit history.
-- Property area has a statistically significant but much weaker relationship with approval.
-- Total income and loan amount are strongly related to each other, but neither shows a significant independent difference between approval outcomes in the selected tests.
-- The engineered repayment-burden indicator improves interpretability but cannot substitute for a complete affordability assessment.
-- Statistical association does not establish causation or justify automated lending decisions.
-
-## Repository contents
+## Repository structure
 
 ```text
-Loan-Prediction-Advanced-Data-Exploration-Statistical-Analysis-Feature-Engineering/
+loan-approval-analysis-feature-engineering/
 ├── README.md
 ├── LICENSE
-├── Advance_Analysis_Loan_Predicition.ipynb
-├── Business_Insights_Report.pdf
-├── Statistical_Analysis_Report.pdf
-├── Feature_Engineering_Documentation.pdf
-├── loan_prediction_week3_final_cleaned.csv
-├── loan_prediction_week3_ml_ready.csv
-├── loan_prediction_week3_train.csv
-└── week3_updated_data_dictionary.csv
+├── requirements.txt
+├── data/
+│   ├── README.md
+│   ├── raw/
+│   │   └── loan_prediction_cleaned.csv
+│   └── processed/
+│       ├── loan_prediction_week3_final_cleaned.csv
+│       ├── loan_prediction_week3_ml_ready.csv
+│       ├── loan_prediction_week3_test.csv
+│       ├── loan_prediction_week3_train.csv
+│       └── week3_updated_data_dictionary.csv
+├── images/
+│   ├── credit-history-approval.png
+│   ├── income-loan-relationship.png
+│   ├── property-area-approval.png
+│   ├── social-preview.png
+│   ├── wilson-moses-banner.png
+│   └── wilson-moses-logo.png
+├── notebooks/
+│   └── 01_loan_approval_analysis_and_feature_engineering.ipynb
+├── reports/
+│   ├── business_insights_report.pdf
+│   ├── feature_engineering_documentation.pdf
+│   └── statistical_analysis_report.pdf
+└── scripts/
+    ├── generate_readme_visuals.py
+    └── generate_reports.py
 ```
 
-### Key deliverables
+## Run locally
 
-- [`Advance_Analysis_Loan_Predicition.ipynb`](Advance_Analysis_Loan_Predicition.ipynb) — complete executed analysis.
-- [`Business_Insights_Report.pdf`](Business_Insights_Report.pdf) — decision-oriented findings and recommendations.
-- [`Statistical_Analysis_Report.pdf`](Statistical_Analysis_Report.pdf) — statistical methods and results.
-- [`Feature_Engineering_Documentation.pdf`](Feature_Engineering_Documentation.pdf) — definitions and rationale for engineered features.
-- [`week3_updated_data_dictionary.csv`](week3_updated_data_dictionary.csv) — updated field documentation.
+```bash
+git clone https://github.com/WilsonMoses-Data/loan-approval-analysis-feature-engineering.git
+cd loan-approval-analysis-feature-engineering
 
-## Reproducing the analysis
+python -m venv .venv
+```
 
-1. Clone the repository.
-2. Create a Python environment.
-3. Install Jupyter, pandas, NumPy, Matplotlib, Seaborn, SciPy, and scikit-learn.
-4. Open `Advance_Analysis_Loan_Predicition.ipynb`.
-5. Confirm the data path used in the loading cell.
-6. Run the notebook from top to bottom.
+Activate the environment:
 
-A pinned dependency file should be added to make future reproduction more reliable.
+```bash
+# Windows
+.venv\Scripts\activate
 
-## Limitations
+# macOS or Linux
+source .venv/bin/activate
+```
 
-- The dataset is small and represents historical decisions, not objective creditworthiness.
-- Historical approval patterns may contain policy or social bias.
-- Important affordability factors are unavailable.
-- The work prepares data for modelling but does not present a validated production model.
-- Findings describe association and should not be interpreted as causal effects.
+Install the dependencies and start Jupyter:
+
+```bash
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+jupyter notebook
+```
+
+Open and run `notebooks/01_loan_approval_analysis_and_feature_engineering.ipynb`. Its paths are repository-relative and its generated datasets are written to `data/processed/`.
+
+Regenerate the visual and report assets with:
+
+```bash
+python scripts/generate_readme_visuals.py
+python scripts/generate_reports.py
+```
+
+## Reports
+
+- [Business Insights Report](reports/business_insights_report.pdf)
+- [Statistical Analysis Report](reports/statistical_analysis_report.pdf)
+- [Feature Engineering Documentation](reports/feature_engineering_documentation.pdf)
+
+The reports follow the same Wilson Moses Data Science Field Notes system used across the portfolio and contain no private contact details.
+
+## Business recommendations
+
+- Prioritise completeness and verification of credit-history information.
+- Assess affordability through combined repayment and income indicators rather than isolated thresholds.
+- Investigate geographic differences before allowing location to influence policy or operations.
+- Preserve the predetermined test set and fit all transformations on training data only.
+- Audit subgroup errors and fairness before considering any operational use.
+
+## Limitations and responsible use
+
+- The dataset is small and represents historical approvals, not objective creditworthiness or default risk.
+- Historical decisions can reproduce undocumented policy or social bias.
+- Important affordability factors and application dates are unavailable.
+- Previously imputed values may reduce variation in some variables.
+- Statistical significance does not establish causation, practical importance or legal permissibility.
+- No production model, deployment or automated lending decision is claimed.
+
+## Skills demonstrated
+
+- Advanced exploratory data analysis
+- Statistical hypothesis testing and effect-size interpretation
+- Feature engineering and redundancy control
+- Mutual-information screening
+- Leakage-safe preprocessing
+- Responsible feature selection and fairness awareness
+- Reproducible notebook and repository design
+- Technical and business communication
+
+## Learning reflection
+
+This phase strengthened my ability to move beyond visible patterns and test whether the evidence supports them. The most important lesson was that feature engineering is not simply creating more columns: every feature needs a clear meaning, a valid construction, a modelling purpose and a documented limitation.
 
 ## Next steps
 
-- Correct the notebook filename from `Predicition` to `Prediction`.
-- Add a dependency file and reproducibility instructions tied to a Python version.
-- Train and compare interpretable classification baselines.
-- Evaluate calibration, decision thresholds, subgroup performance, and error costs.
-- Consolidate this phase with the Week 2 preparation work into one end-to-end case study when programme reporting permits.
+- Establish a transparent baseline classifier.
+- Compare logistic regression, decision-tree and ensemble approaches.
+- Evaluate discrimination, calibration, threshold trade-offs and subgroup performance.
+- Interpret the selected model with transparent methods.
+- Package preprocessing and modelling into one reproducible pipeline.
 
-## Licence and data source
+## Author
 
-Original code and documentation are released under the repository’s [MIT Licence](LICENSE). The loan dataset remains subject to the terms of its [original Kaggle source](https://www.kaggle.com/datasets/altruistdelhite04/loan-prediction-problem-dataset).
+**Wilson Moses**  
+Developing Data Scientist × AI Engineer based in Botswana
 
-## Contact
-
-**Wilson Moses** — Data Scientist × AI Engineer in development  
 [LinkedIn](https://www.linkedin.com/in/wilson-moses-9207b22bb) · [GitHub](https://github.com/WilsonMoses-Data) · [Moses Learns Data](https://www.tiktok.com/@moses.learnsdata)
+
+---
+
+<p align="center"><strong>Learning. Building. Applying.</strong></p>
